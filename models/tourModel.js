@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 
+const User = require('./userModel');
+
 // Schema
 const tourSchemaObject = {
   name: {
@@ -99,6 +101,7 @@ const tourSchemaObject = {
       day: Number,
     },
   ],
+  guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
 };
 const tourSchema = new mongoose.Schema(tourSchemaObject, {
   toJSON: { virtuals: true },
@@ -109,29 +112,34 @@ tourSchema.virtual('durationWeeks').get(function () {
   return Math.round(this.duration / 7);
 });
 
-// document pre middleware runs before save/create event and not for update !
+// Pre Middleware runs before save/create events and not for update!
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
-// document post middleware
-// tourSchema.post('save', function (doc, next) {
-//   console.log('document saved !');
-//   console.log(doc);
+
+// Embedding Tour Guides
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
 //   next();
 // });
 
-// query middleware
+// Query Middleware
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   next();
 });
-// query post middleware
-// tourSchema.post(/^find/, function (docs, next) {
-//   console.log(docs);
-//   next();
-// });
 
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
+  next();
+});
+
+// Aggregation Middleware
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
   next();

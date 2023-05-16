@@ -1,8 +1,8 @@
 const { query } = require('express');
-const Tour = require('../models/tourModel.js');
-const catchAsync = require('../utils/catchAsync.js');
-const APIFeatures = require('../utils/apiFeatures.js');
-const AppError = require('../utils/appError.js');
+const Tour = require('../models/tourModel');
+const catchAsync = require('../utils/catchAsync');
+const APIFeatures = require('../utils/apiFeatures');
+const AppError = require('../utils/appError');
 
 exports.aliasTopTours = async (req, res, next) => {
   req.query.limit = '5';
