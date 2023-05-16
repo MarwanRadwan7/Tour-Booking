@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 
-const User = require('./userModel');
-
 // Schema
 const tourSchemaObject = {
   name: {
@@ -101,15 +99,27 @@ const tourSchemaObject = {
       day: Number,
     },
   ],
-  guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+  guides: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
+  ],
 };
 const tourSchema = new mongoose.Schema(tourSchemaObject, {
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
 });
 
+// Virtuals
 tourSchema.virtual('durationWeeks').get(function () {
   return Math.round(this.duration / 7);
+});
+// Virtual Populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
 });
 
 // Pre Middleware runs before save/create events and not for update!
