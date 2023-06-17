@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Tour = require('./tourModel');
 
 const reviewSchemaOpt = {
   review: {
@@ -30,17 +31,53 @@ const reviewSchema = mongoose.Schema(reviewSchemaOpt, {
   toObject: { virtuals: true },
 });
 
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true }); // Unique Review
+
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
     select: 'name photo',
   });
-  //   To prevent chain referencing
-  //   this.populate({
-  //     path: 'tour',
-  //     select: 'name',
-  //   });
   next();
+});
+
+// Static method runs on the model
+reviewSchema.statics.calcAvgRating = async function (tourID) {
+  const stats = await this.aggregate([
+    {
+      $match: { tour: tourID },
+    },
+    {
+      $group: {
+        _id: '$tour',
+        numRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+  if (stats.length > 0) {
+    await Tour.findByIdAndUpdate(tourID, {
+      ratingsQuantity: stats[0].numRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await Tour.findByIdAndUpdate(tourID, {
+      ratingsQuantity: 0,
+      ratingsAverage: 0,
+    });
+  }
+};
+
+reviewSchema.post('save', function () {
+  this.constructor.calcAvgRating(this.tour);
+});
+
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.r = await Tour.findOne();
+  next();
+});
+reviewSchema.post(/^findOneAnd/, async function () {
+  await this.r.constructor.calcAvgRating(this.r.tour);
 });
 
 const Review = mongoose.model('Review', reviewSchema);

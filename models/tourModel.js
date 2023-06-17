@@ -32,6 +32,7 @@ const tourSchemaObject = {
     default: 4.5,
     min: [0, 'A Tour must have a rating above or equal 0.'],
     max: [5, 'A Tour must have a rating less or equal 5.0 .'],
+    set: (val) => Math.round(val * 10) / 10,
   },
   ratingsQuantity: {
     type: Number,
@@ -111,6 +112,11 @@ const tourSchema = new mongoose.Schema(tourSchemaObject, {
   toObject: { virtuals: true },
 });
 
+// Indexing
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
+
 // Virtuals
 tourSchema.virtual('durationWeeks').get(function () {
   return Math.round(this.duration / 7);
@@ -118,7 +124,7 @@ tourSchema.virtual('durationWeeks').get(function () {
 // Virtual Populate
 tourSchema.virtual('reviews', {
   ref: 'Review',
-  foreignField: 'tour',
+  foreignField: 'tour', //Name of the field on other schema where the reference to the current model is stored
   localField: '_id',
 });
 
@@ -150,10 +156,10 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 // Aggregation Middleware
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
 
 // Model
 // eslint-disable-next-line new-cap
