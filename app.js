@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -11,8 +12,13 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', path.join(`${__dirname}`, 'views'));
+app.use(express.static(path.join(`${__dirname}`, 'public'))); // Serving Static files
 
 // Middleware functions
 if (process.env.NODE_ENV !== 'production') {
@@ -48,8 +54,6 @@ app.use(express.json({ limit: '10kb' })); // Body Parser ; reading data from the
 app.use(mongoSanitize()); // Prevent noSql injection
 app.use(xss()); // Prevent malicious html inject
 
-app.use(express.static(`${__dirname}/public`)); // Serving Static files
-
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
@@ -57,6 +61,8 @@ app.use((req, res, next) => {
 
 // Routers
 // Mounting the Router Process
+
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
