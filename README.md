@@ -4,6 +4,7 @@
  <p>Note: I'm currently working on this project</p>
 
 ## API
+
 - [APIs Documentation](https://documenter.getpostman.com/view/26137203/2s93m32Nge).
 
 ## Tools and Technologies
@@ -18,11 +19,12 @@
 
 ## To-do
 
-- [X] Building the User Account Page.
+- [x] Building the User Account Page.
+- [x] Integrate [MapBox](https://www.mapbox.com/) on the tour page.
 - [ ] Allowing users to Upload images Using [Multer](https://github.com/expressjs/multer).
-- [X] Building a Complex Email Handler.
+- [x] Building a Complex Email Handler.
 - [ ] Integrating [Stripe](https://stripe.com/) into the Back-End.
 - [ ] Processing Payments on the Front-End.
-- [X] Modeling the Bookings and finishing its API.
+- [x] Modeling the Bookings and finishing its API.
 - [ ] Deploy on [Railway](https://railway.app/).
-- [ ] Update README.
+- [x] Update README.
