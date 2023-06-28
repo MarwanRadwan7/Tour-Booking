@@ -83,6 +83,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   if (!token) {
     return next(
@@ -109,6 +111,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // Grant access to user
   req.user = currentUser; // adding the current user to req/next middleware
+  res.locals.user = currentUser;
   next();
 });
 
