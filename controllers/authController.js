@@ -152,6 +152,7 @@ exports.restrictTo = function (...roles) {
     // We got (req.user.role ) from the previous middleware
     // console.log(req.user.role);
     if (!roles.includes(req.user.role)) {
+      console.log(req.user.role);
       return next(
         new AppError(`Yoy don't have permission to perform this action!`, 403)
       );

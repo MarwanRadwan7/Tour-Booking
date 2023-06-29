@@ -12,13 +12,15 @@ router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 // Next Middlewares will be authenticated
-router.use(authController.protect, authController.restrictTo('admin'));
+router.use(authController.protect);
 
 router.patch('/updatePassword', authController.updatePassword);
 
 router.get('/getMe', userController.getMe, userController.getUser);
 router.patch('/updateMe', userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
+
+router.use(authController.restrictTo('admin'));
 
 router
   .route('/')

@@ -1,13 +1,15 @@
 /* eslint-disable */
 import '@babel/polyfill';
 import { displayMap } from './mapbox';
-import { login } from './login';
-import { logout } from './login';
+import { login, logout } from './login';
+import { updateData } from './updateSettings';
 
 // DOM
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el.nav__el--logout');
+const userDataFrom = document.querySelector('.form-user-data');
+const userPasswordFrom = document.querySelector('.form-user-password');
 
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
@@ -25,4 +27,33 @@ if (loginForm) {
 
 if (logOutBtn) {
   logOutBtn.addEventListener('click', logout);
+}
+
+if (userDataFrom) {
+  userDataFrom.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const name = document.getElementById('name').value;
+    updateData({ name, email }, 'data');
+  });
+}
+
+if (userPasswordFrom) {
+  userDataFrom.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = (document.querySelector(
+      '.btn--save-password '
+    ).textContent = 'Updating..');
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    await updateData(
+      { passwordCurrent, password, passwordConfirm },
+      'password'
+    );
+    submitBtn = 'Save password';
+    passwordCurrent = '';
+    password = '';
+    passwordConfirm = '';
+  });
 }
