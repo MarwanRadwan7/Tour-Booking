@@ -21,7 +21,7 @@
 
 - [x] Building the User Account Page.
 - [x] Integrate [MapBox](https://www.mapbox.com/) on the tour page.
-- [ ] Allowing users to Upload images Using [Multer](https://github.com/expressjs/multer).
+- [x] Allowing users to Upload images Using [Multer](https://github.com/expressjs/multer).
 - [x] Building a Complex Email Handler.
 - [ ] Integrating [Stripe](https://stripe.com/) into the Back-End.
 - [ ] Processing Payments on the Front-End.
