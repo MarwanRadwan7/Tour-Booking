@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser'); // to get access to certain cookie in a request
 const cors = require('cors');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -78,6 +79,8 @@ app.use(
     ],
   })
 ); // Prevent parameter pollution
+
+app.use(compression());
 
 const limiter = rateLimit({
   max: 100,
