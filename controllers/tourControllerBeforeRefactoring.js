@@ -18,8 +18,6 @@ exports.aliasTopTours = async (req, res, next) => {
 
 exports.getAllTours = async (req, res) => {
   try {
-    console.log(req.query);
-
     // BUILD THE QUERY
     // 1A) Filltering
     const queryObj = { ...req.query }; // To avoid js Referencing
