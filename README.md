@@ -23,8 +23,8 @@
 - [x] Integrate [MapBox](https://www.mapbox.com/) on the tour page.
 - [x] Allowing users to Upload images Using [Multer](https://github.com/expressjs/multer).
 - [x] Building a Complex Email Handler.
-- [ ] Integrating [Stripe](https://stripe.com/) into the Back-End.
-- [ ] Processing Payments on the Front-End.
+- [x] Integrating [Stripe](https://stripe.com/) into the Back-End.
+- [x] Processing Payments on the Front-End.
 - [x] Modeling the Bookings and finishing its API.
 - [ ] Deploy on [Railway](https://railway.app/).
 - [x] Update README.
