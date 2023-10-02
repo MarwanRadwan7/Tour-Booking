@@ -26,5 +26,5 @@
 - [x] Integrating [Stripe](https://stripe.com/) into the Back-End.
 - [x] Processing Payments on the Front-End.
 - [x] Modeling the Bookings and finishing its API.
-- [ ] Deploy on [Railway](https://railway.app/).
+- [x] Deploy on [Render](https://render.com/).
 - [x] Update README.
