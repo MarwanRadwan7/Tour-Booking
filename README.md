@@ -1,7 +1,7 @@
 # Tour-Booking
 
  <h1 align=center>Tour booking site built with Node.js.</h1>
- <p>Note: I'm currently working on this project</p>
+<!--  <p>Note: I'm currently working on this project</p> -->
 
 ## API
 
